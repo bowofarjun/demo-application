@@ -2,12 +2,12 @@ x-common-variables: &common-variables
   RESTART_ON_FAILURE: true
 services:
   demo-config:
-    image: registry:5000/2022mt12119/demo-config:0.0.1-SNAPSHOT
+    image: docker.io/2022mt12119/demo-config:0.0.1-SNAPSHOT
     environment: *common-variables
     volumes:
       - tmp_volume:/tmp_volume
   demo-app:
-    image: registry:5000/2022mt12119/demo-app:0.0.1-SNAPSHOT
+    image: docker.io/2022mt12119/demo-app:0.0.1-SNAPSHOT
     environment: *common-variables
     volumes:
       - tmp_volume:/tmp_volume

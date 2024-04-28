@@ -15,7 +15,7 @@
 	<description>This is a demo project</description>
     <packaging>pom</packaging>
 	<properties>
-		<dtr.base.url>registry:5000</dtr.base.url>
+		<dtr.base.url>docker.io</dtr.base.url>
 		<dtr.repo.name>2022mt12119</dtr.repo.name>
 		<io.fabric8.version>0.44.0</io.fabric8.version>
 	</properties>
