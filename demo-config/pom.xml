@@ -2,6 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>in.ac.bitspilani.wilp</groupId>
+		<artifactId>demo</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 	<groupId>in.ac.bitspilani.wilp</groupId>
 	<artifactId>demo-config</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -32,11 +37,12 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.34.1</version>
+				<version>${io.fabric8.version}</version>
 				<configuration>
+					<registry>${dtr.base.url}</registry>
 					<images>
 						<image>
-							<name>2022mt12119/${project.artifactId}:${project.version}</name>
+							<name>${dtr.repo.name}/${project.artifactId}:${project.version}</name>
 							<build>
 								<dockerFileDir>${project.basedir}</dockerFileDir>
 							</build>

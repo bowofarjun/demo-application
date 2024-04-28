@@ -3,10 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>in.ac.bitspilani.wilp</groupId>
+		<artifactId>demo</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>in.ac.bitspilani.wilp</groupId>
 	<artifactId>demo-app</artifactId>
@@ -44,9 +43,10 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.34.1</version>
 				<configuration>
+					<registry>${dtr.base.url}</registry>
 					<images>
 						<image>
-							<name>2022mt12119/${project.artifactId}:${project.version}</name>
+							<name>${dtr.repo.name}/${project.artifactId}:${project.version}</name>
 							<build>
 								<dockerFileDir>${project.basedir}</dockerFileDir>
 							</build>
