@@ -25,7 +25,7 @@ pipeline {
         stage('Create prompt'){
             steps {
                 script {
-                    FINAL_GPT_PROMPT = sh(script: "${GPT_RULES}\n\n\nBelow are the files in git commit (tree order):\n${CHANGED_FILES}\n\n\nAlso git commit message is: ${COMMIT_MESG}", returnStdout: true)
+                    FINAL_GPT_PROMPT = sh(script: "echo '${GPT_RULES}\n\n\nBelow are the files in git commit (tree order):\n${CHANGED_FILES}\n\n\nAlso git commit message is: ${COMMIT_MESG}'", returnStdout: true)
                     echo "Final Prompt: \n\n${FINAL_GPT_PROMPT}"
                 }
             }
