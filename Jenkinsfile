@@ -1,4 +1,5 @@
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 pipeline {
     agent any 
@@ -8,6 +9,10 @@ pipeline {
         GPT_RULES = ''
         FINAL_GPT_PROMPT = ''
         OPEN_API_KEY = credentials('demo-jenkins-api-key')
+        APP_ONLY = 'false'
+        CONFIG_ONLY = 'false'
+        DOCKER_BUILD_AND_PUSH_CONTAINER = 'false'
+        DONT_BUILD = 'false'
     }
 
     stages {
@@ -67,55 +72,54 @@ pipeline {
                     // Print response to console
                     echo "Response Status: ${response.status}"
                     echo "Response Body: ${response.content}"
+
+                    def jsonSlurper = new JsonSlurper()
+                    def responseData = jsonSlurper.parseText(response.content)
+
+                    APP_ONLY = ${responseData.appOnly}
+                    CONFIG_ONLY = ${responseData.configOnly}
+                    DOCKER_BUILD_AND_PUSH_CONTAINER = ${responseData.dockerBuildAndPushContainer}
+                    DONT_BUILD = ${responseData.dontBuild}
                 }
             }
         }
 
-        /*stage('Compile') {
+        stage('Compile') {
             steps {
+                if(DONT_BUILD && APP_ONLY) {
                 sh '''mvn clean compile
                 '''
+                }
             }
         }
 
         stage('Package') {
             steps {
-                
+                if(DONT_BUILD && (APP_ONLY || CONFIG_ONLY)) {
                 sh '''mvn clean package
                 '''
-                
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
+                if(DONT_BUILD && DOCKER_BUILD_AND_PUSH_CONTAINER) {
                 sh '''mvn docker:build
                 '''
+                }
             }
         }
 
         stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
-                '''
+                if(DONT_BUILD && DOCKER_BUILD_AND_PUSH_CONTAINER) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
+                    '''
+                    }
                 }
             }
-        }*/
+        }
     }
-
-    /*post {
-        always {
-            // This block will always execute, even if the build fails
-            echo 'This will always run regardless of the build result.'
-        }
-        success {
-            // Actions to take if the pipeline succeeds
-            echo 'Build was successful!'
-        }
-        failure {
-            // Actions to take if the pipeline fails
-            echo 'Build failed.'
-        }
-    }*/
 }
