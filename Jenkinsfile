@@ -86,37 +86,45 @@ pipeline {
 
         stage('Compile') {
             steps {
-                if(DONT_BUILD.toBoolean() && APP_ONLY.toBoolean()) {
-                sh '''mvn clean compile
-                '''
+                script{
+                    if(DONT_BUILD.toBoolean() && APP_ONLY.toBoolean()) {
+                    sh '''mvn clean compile
+                    '''
+                    }
                 }
             }
         }
 
         stage('Package') {
             steps {
-                if(DONT_BUILD.toBoolean() && (APP_ONLY.toBoolean() || CONFIG_ONLY.toBoolean())) {
-                sh '''mvn clean package
-                '''
+                script {
+                    if(DONT_BUILD.toBoolean() && (APP_ONLY.toBoolean() || CONFIG_ONLY.toBoolean())) {
+                    sh '''mvn clean package
+                    '''
+                    }
                 }
             }
         }
 
         stage('Docker Build') {
             steps {
-                if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
-                sh '''mvn docker:build
-                '''
+                script {
+                    if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
+                    sh '''mvn docker:build
+                    '''
+                    }
                 }
             }
         }
 
         stage('Docker Push') {
             steps {
-                if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
-                    withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
-                    '''
+                script {
+                    if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
+                        withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
+                        '''
+                        }
                     }
                 }
             }
