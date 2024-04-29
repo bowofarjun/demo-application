@@ -1,9 +1,9 @@
 pipeline {
     agent any 
     environment {
-        CHANGED_FILES = ''
+       /* CHANGED_FILES = ''
         COMMIT_MESG = ''
-        GPT_RULES = ''
+        GPT_RULES = ''*/
     }
 
     stages {
@@ -11,12 +11,12 @@ pipeline {
         stage('Git Details and Rules') {
             steps {
                 script {
-                    env.CHANGED_FILES = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
-                    echo "Files changed in the last commit: \n${env.CHANGED_FILES}"
-                    env.COMMIT_MESG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-                    echo "Last commit message: \n${env.COMMIT_MESG}"
-                    env.GPT_RULES = sh(script: "cat rulesInfo.txt", returnStdout: true).trim()
-                    echo "Rules Info: \n${env.GPT_RULES}"
+                    def CHANGED_FILES = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
+                    echo "Files changed in the last commit: \n${CHANGED_FILES}"
+                    def COMMIT_MESG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: \n${COMMIT_MESG}"
+                    def GPT_RULES = sh(script: "cat rulesInfo.txt", returnStdout: true).trim()
+                    echo "Rules Info: \n${GPT_RULES}"
                 }
             }
         }
