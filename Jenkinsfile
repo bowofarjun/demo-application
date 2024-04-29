@@ -1,32 +1,40 @@
 pipeline {
-    agent any  // This specifies that the pipeline can run on any available agent
+    agent any 
 
     stages {
-        stage('Checkout') {
+        stage('Compile') {
             steps {
-                // Checks out the source code from a specified repository
-                echo 'Checkout from Git'
+                
+                sh '''mvn clean compile
+                '''
             }
         }
 
-        stage('Build') {
+        stage('Package') {
             steps {
-                // Run a build command, could be a script or a tool command
-                echo 'Building the project...'
-                //sh 'make build' // This is an example, replace with your actual build command
+                
+                sh '''mvn clean package
+                '''
+                
             }
         }
 
-        stage('Test') {
+        stage('Docker Build') {
             steps {
-                // Run tests on the built project
-                echo 'Running tests...'
-                //sh 'make test' // This is an example, replace with your actual test command
+                sh '''mvn docker:build
+                '''
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                sh '''mvn -Ddocker.username="2022mt12119" -Ddocker.password="@rjun93M!" docker:push
+                '''
             }
         }
     }
 
-    post {
+    /*post {
         always {
             // This block will always execute, even if the build fails
             echo 'This will always run regardless of the build result.'
@@ -39,5 +47,5 @@ pipeline {
             // Actions to take if the pipeline fails
             echo 'Build failed.'
         }
-    }
+    }*/
 }
