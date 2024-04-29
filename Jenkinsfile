@@ -114,10 +114,10 @@ pipeline {
 
                     def jsonSlurper = new JsonSlurper()
                     def responseData = jsonSlurper.parseText(response.content)
+              
+                    def text = responseData.candidates[0].content.parts[0].text.replaceAll("```json|```", "").trim()
 
-                    def text = ${responseData.candidates[0].content.parts[0].text}.replaceAll("```json|```", "").trim()
-
-                    echo $text
+                    echo "${text}"
                     def finalResponseData = jsonSlurper.parseText(text)
 
                     APP_ONLY = ${finalResponseData.appOnly}
