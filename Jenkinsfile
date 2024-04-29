@@ -86,7 +86,7 @@ pipeline {
 
         stage('Compile') {
             steps {
-                if(${DONT_BUILD} && ${APP_ONLY}) {
+                if(DONT_BUILD.toBoolean() && APP_ONLY.toBoolean()) {
                 sh '''mvn clean compile
                 '''
                 }
@@ -95,7 +95,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                if(${DONT_BUILD} && (${APP_ONLY} || ${CONFIG_ONLY})) {
+                if(DONT_BUILD.toBoolean() && (APP_ONLY.toBoolean() || CONFIG_ONLY.toBoolean())) {
                 sh '''mvn clean package
                 '''
                 }
@@ -104,7 +104,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                if(${DONT_BUILD} && ${DOCKER_BUILD_AND_PUSH_CONTAINER}) {
+                if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
                 sh '''mvn docker:build
                 '''
                 }
@@ -113,7 +113,7 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                if(${DONT_BUILD} && ${DOCKER_BUILD_AND_PUSH_CONTAINER}) {
+                if(DONT_BUILD.toBoolean() && DOCKER_BUILD_AND_PUSH_CONTAINER.toBoolean()) {
                     withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
                     '''
