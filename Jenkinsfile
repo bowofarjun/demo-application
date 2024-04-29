@@ -1,3 +1,5 @@
+import groovy.json.JsonBuilder
+
 pipeline {
     agent any 
     environment {
@@ -38,17 +40,16 @@ pipeline {
                     // Define API URL
                     def apiUrl = 'https://api.openai.com/v1/chat/completions'
 
-                    // Define the request body
-                    def requestBody = """
-                    {
-                        "model": "gpt-3.5-turbo",
-                        "messages": [
-                            {"role": "user", "content": "${FINAL_GPT_PROMPT}"}
+                    def builder = new JsonBuilder()
+                    builder {
+                        model "gpt-3.5-turbo"
+                        messages [
+                            [role: "user", content: ${FINAL_GPT_PROMPT}]
                         ]
                     }
-                    """
 
-                    echo "${requestBody}"
+                    def requestBody = builder.toPrettyString()  // Generates formatted JSON string
+                    echo "Generated JSON: $requestBody"
 
                     // Make HTTP POST request
                     def response = httpRequest(
