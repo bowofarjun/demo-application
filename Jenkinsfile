@@ -43,7 +43,7 @@ pipeline {
                     def data = [
                                 model: "gpt-3.5-turbo",
                                 messages: [
-                                    [role: "user", content: ${FINAL_GPT_PROMPT}]
+                                    [role: "user", content: FINAL_GPT_PROMPT]
                                ]
                         ]
 
