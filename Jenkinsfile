@@ -10,13 +10,14 @@ pipeline {
 
         stage('Git Details and Rules') {
             steps {
-                env.CHANGED_FILES = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
-                echo "Files changed in the last commit: \n${env.CHANGED_FILES}"
-                env.COMMIT_MESG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-                echo "Last commit message: \n${env.COMMIT_MESG}"
-                env.GPT_RULES = sh(script: "cat rulesInfo.txt", returnStdout: true).trim()
-                echo "Rules Info: \n${env.GPT_RULES}"
-
+                script{
+                    env.CHANGED_FILES = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
+                    echo "Files changed in the last commit: \n${env.CHANGED_FILES}"
+                    env.COMMIT_MESG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: \n${env.COMMIT_MESG}"
+                    env.GPT_RULES = sh(script: "cat rulesInfo.txt", returnStdout: true).trim()
+                    echo "Rules Info: \n${env.GPT_RULES}"
+                }
             }
         }
 
