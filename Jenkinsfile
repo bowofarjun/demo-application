@@ -1,10 +1,10 @@
 pipeline {
     agent any 
-    environment {
-       /* CHANGED_FILES = ''
+    /* environment {
+       CHANGED_FILES = ''
         COMMIT_MESG = ''
-        GPT_RULES = ''*/
-    }
+        GPT_RULES = ''
+    }*/
 
     stages {
 
