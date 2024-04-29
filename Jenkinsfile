@@ -77,7 +77,7 @@ pipeline {
                     def jsonSlurper = new JsonSlurper()
                     def responseData = jsonSlurper.parseText(response.content)
                     */
- /*                   def apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent'
+                    def apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent'
                     def data = [
                         contents: [
                             [
@@ -116,9 +116,6 @@ pipeline {
                     def responseData = jsonSlurper.parseText(response.content)
 
                     def text = responseData.candidates[0].content.parts[0].text.replaceAll("```json|```", "").trim()
-*/
-                    def text1 = "```json\n{\n  \"appOnly\": false,\n  \"configOnly\": false,\n  \"dockerBuildAndPushContainer\": true,\n  \"dontBuild\": false\n}\n```"
-                    def text = text1.replaceAll("```json|```", "").trim()
 
                     echo "${text}"
                     def jsonSlurper2 = new JsonSlurper()
