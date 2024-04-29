@@ -48,6 +48,8 @@ pipeline {
                     }
                     """
 
+                    echo "${requestBody}"
+
                     // Make HTTP POST request
                     def response = httpRequest(
                         acceptType: 'APPLICATION_JSON',
