@@ -10,7 +10,7 @@ pipeline {
 
         stage('Git Details and Rules') {
             steps {
-                script{
+                script {
                     env.CHANGED_FILES = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
                     echo "Files changed in the last commit: \n${env.CHANGED_FILES}"
                     env.COMMIT_MESG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
@@ -21,7 +21,6 @@ pipeline {
             }
         }
 
-        stage('Get Commit message')
         /*stage('Compile') {
             steps {
                 sh '''mvn clean compile
