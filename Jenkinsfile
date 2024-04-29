@@ -1,9 +1,10 @@
 pipeline {
     agent any 
     environment {
-       CHANGED_FILES = ''
+        CHANGED_FILES = ''
         COMMIT_MESG = ''
         GPT_RULES = ''
+        FINAL_GPT_PROMPT = ''
     }
 
     stages {
@@ -18,6 +19,21 @@ pipeline {
                     GPT_RULES = sh(script: "cat rulesInfo.txt", returnStdout: true).trim()
                     echo "Rules Info: \n${GPT_RULES}"
                 }
+            }
+        }
+
+        stage('Create prompt'){
+            steps {
+                script {
+                    FINAL_GPT_PROMPT = sh(script: "${GPT_RULES}\n\n\nBelow are the files in git commit (tree order):\n${CHANGED_FILES}\n\n\nAlso git commit message is: ${COMMIT_MESG}", returnStdout: true)
+                    echo "Final Prompt: \n\n${FINAL_GPT_PROMPT}"
+                }
+            }
+        }
+
+        stage('Call ChatGPT and Save Response'){
+            steps {
+                echo "Hello World"
             }
         }
 
