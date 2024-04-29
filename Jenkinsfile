@@ -9,6 +9,7 @@ pipeline {
         GPT_RULES = ''
         FINAL_GPT_PROMPT = ''
         OPEN_API_KEY = credentials('demo-jenkins-api-key')
+        GEMINI_API_KEY = credentials('gemini-api-key')
         APP_ONLY = 'false'
         CONFIG_ONLY = 'false'
         DOCKER_BUILD_AND_PUSH_CONTAINER = 'false'
@@ -43,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Define API URL
-                    def apiUrl = 'https://api.openai.com/v1/chat/completions'
+                    /*def apiUrl = 'https://api.openai.com/v1/chat/completions'
 
                     def data = [
                                 model: "gpt-3.5-turbo",
@@ -75,11 +76,54 @@ pipeline {
 
                     def jsonSlurper = new JsonSlurper()
                     def responseData = jsonSlurper.parseText(response.content)
+                    */
+                    def apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent'
+                    def data = [
+                        contents: [
+                            [
+                                role: "user",
+                                parts: [
+                                    [
+                                        text: FINAL_GPT_PROMPT
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
 
-                    APP_ONLY = ${responseData.appOnly}
-                    CONFIG_ONLY = ${responseData.configOnly}
-                    DOCKER_BUILD_AND_PUSH_CONTAINER = ${responseData.dockerBuildAndPushContainer}
-                    DONT_BUILD = ${responseData.dontBuild}
+                    def requestBody = JsonOutput.toJson(data)
+                    requestBody = JsonOutput.prettyPrint(requestBody)
+                    echo "Generated JSON: $requestBody"
+
+                    // Make HTTP POST request
+                    def response = httpRequest(
+                        acceptType: 'APPLICATION_JSON',
+                        contentType: 'APPLICATION_JSON',
+                        httpMode: 'POST',
+                        requestBody: requestBody,
+                        url: apiUrl,
+                        customHeaders: [
+                            [name: 'x-goog-api-key', value: "${env.GEMINI_API_KEY}"],
+                            [name: 'Content-Type', value: 'application/json']
+                        ]
+                    )
+
+                    // Print response to console
+                    echo "Response Status: ${response.status}"
+                    echo "Response Body: ${response.content}"
+
+                    def jsonSlurper = new JsonSlurper()
+                    def responseData = jsonSlurper.parseText(response.content)
+
+                    def text = ${responseData.candidates[0].content.parts[0].text}.replaceAll("```json|```", "").trim()
+
+                    echo $text
+                    def finalResponseData = jsonSlurper.parseText(text)
+
+                    APP_ONLY = ${finalResponseData.appOnly}
+                    CONFIG_ONLY = ${finalResponseData.configOnly}
+                    DOCKER_BUILD_AND_PUSH_CONTAINER = ${finalResponseData.dockerBuildAndPushContainer}
+                    DONT_BUILD = ${finalResponseData.dontBuild}
                 }
             }
         }
