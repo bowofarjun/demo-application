@@ -114,7 +114,7 @@ pipeline {
 
                     def jsonSlurper = new JsonSlurper()
                     def responseData = jsonSlurper.parseText(response.content)
-              
+
                     def text = responseData.candidates[0].content.parts[0].text.replaceAll("```json|```", "").trim()
 
                     echo "${text}"
@@ -124,6 +124,11 @@ pipeline {
                     CONFIG_ONLY = ${finalResponseData.configOnly}
                     DOCKER_BUILD_AND_PUSH_CONTAINER = ${finalResponseData.dockerBuildAndPushContainer}
                     DONT_BUILD = ${finalResponseData.dontBuild}
+
+                    echo "${APP_ONLY}"
+                    echo "${CONFIG_ONLY}"
+                    echo "${DOCKER_BUILD_AND_PUSH_CONTAINER}"
+                    echo "${DONT_BUILD}"
                 }
             }
         }
