@@ -120,6 +120,8 @@ pipeline {
                     echo "${text}"
                     def finalResponseData = jsonSlurper.parseText(text)
 
+                    echo "hello"
+
                     APP_ONLY = ${finalResponseData.appOnly}
                     CONFIG_ONLY = ${finalResponseData.configOnly}
                     DOCKER_BUILD_AND_PUSH_CONTAINER = ${finalResponseData.dockerBuildAndPushContainer}
