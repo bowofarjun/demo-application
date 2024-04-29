@@ -28,8 +28,10 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                sh '''mvn -Ddocker.username="2022mt12119" -Ddocker.password="@rjun93M!" docker:push
+                withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
                 '''
+                }
             }
         }
     }
