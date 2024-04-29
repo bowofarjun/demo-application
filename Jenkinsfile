@@ -77,7 +77,7 @@ pipeline {
                     def jsonSlurper = new JsonSlurper()
                     def responseData = jsonSlurper.parseText(response.content)
                     */
-                    def apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent'
+ /*                   def apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent'
                     def data = [
                         contents: [
                             [
@@ -116,16 +116,20 @@ pipeline {
                     def responseData = jsonSlurper.parseText(response.content)
 
                     def text = responseData.candidates[0].content.parts[0].text.replaceAll("```json|```", "").trim()
+*/
+                    def text1 = "```json\n{\n  \"appOnly\": false,\n  \"configOnly\": false,\n  \"dockerBuildAndPushContainer\": true,\n  \"dontBuild\": false\n}\n```"
+                    def text = text1.replaceAll("```json|```", "").trim()
 
                     echo "${text}"
-                    def finalResponseData = jsonSlurper.parseText(text)
+                    def jsonSlurper2 = new JsonSlurper()
+                    def finalResponseData = jsonSlurper2.parseText(text)
 
-                    echo "hello"
+                    echo "${finalResponseData.appOnly} "
 
-                    APP_ONLY = ${finalResponseData.appOnly}
-                    CONFIG_ONLY = ${finalResponseData.configOnly}
-                    DOCKER_BUILD_AND_PUSH_CONTAINER = ${finalResponseData.dockerBuildAndPushContainer}
-                    DONT_BUILD = ${finalResponseData.dontBuild}
+                    APP_ONLY = "${finalResponseData.appOnly}"
+                    CONFIG_ONLY = "${finalResponseData.configOnly}"
+                    DOCKER_BUILD_AND_PUSH_CONTAINER = "${finalResponseData.dockerBuildAndPushContainer}"
+                    DONT_BUILD = "${finalResponseData.dontBuild}"
 
                     echo "${APP_ONLY}"
                     echo "${CONFIG_ONLY}"
