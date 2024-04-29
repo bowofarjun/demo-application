@@ -34,35 +34,37 @@ pipeline {
 
         stage('Call ChatGPT and Save Response'){
             steps {
-                // Define API URL
-                                    def apiUrl = 'https://api.openai.com/v1/chat/completions'
+                script {
+                    // Define API URL
+                    def apiUrl = 'https://api.openai.com/v1/chat/completions'
 
-                                    // Define the request body
-                                    def requestBody = """
-                                    {
-                                        "model": "gpt-3.5-turbo",
-                                        "messages": [
-                                            {"role": "user", "content": "${FINAL_GPT_PROMPT}"}
-                                        ]
-                                    }
-                                    """
+                    // Define the request body
+                    def requestBody = """
+                    {
+                        "model": "gpt-3.5-turbo",
+                        "messages": [
+                            {"role": "user", "content": "${FINAL_GPT_PROMPT}"}
+                        ]
+                    }
+                    """
 
-                                    // Make HTTP POST request
-                                    def response = httpRequest(
-                                        acceptType: 'APPLICATION_JSON',
-                                        contentType: 'APPLICATION_JSON',
-                                        httpMode: 'POST',
-                                        requestBody: requestBody,
-                                        url: apiUrl,
-                                        customHeaders: [
-                                            [name: 'Authorization', value: "Bearer ${env.API_KEY}"],
-                                            [name: 'Content-Type', value: 'application/json']
-                                        ]
-                                    )
+                    // Make HTTP POST request
+                    def response = httpRequest(
+                        acceptType: 'APPLICATION_JSON',
+                        contentType: 'APPLICATION_JSON',
+                        httpMode: 'POST',
+                        requestBody: requestBody,
+                        url: apiUrl,
+                        customHeaders: [
+                            [name: 'Authorization', value: "Bearer ${env.OPEN_API_KEY}"],
+                            [name: 'Content-Type', value: 'application/json']
+                        ]
+                    )
 
-                                    // Print response to console
-                                    echo "Response Status: ${response.status}"
-                                    echo "Response Body: ${response.content}"
+                    // Print response to console
+                    echo "Response Status: ${response.status}"
+                    echo "Response Body: ${response.content}"
+                }
             }
         }
 
