@@ -8,7 +8,7 @@ pipeline {
         COMMIT_MESG = ''
         GPT_RULES = ''
         FINAL_GPT_PROMPT = ''
-        OPEN_API_KEY = credentials('demo-jenkins-api-key')
+        //OPEN_API_KEY = credentials('demo-jenkins-api-key')
         GEMINI_API_KEY = credentials('gemini-api-key')
         APP_ONLY = 'false'
         CONFIG_ONLY = 'false'
