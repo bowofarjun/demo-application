@@ -6,8 +6,8 @@ dontBuild
 
 Rules:
 a. If the git commit message says to skip or not to build, then set dontBuild to true, else false.
-b. If the git files contain changes for demo-config folder and files, set configOnly flag to true, else false.
-c. If the git files contain changes for demo-app folder and files, set configOnly flag to true, else false.
+b. If the git files contain changes inside demo-config folder and files, set configOnly flag to true, else false.
+c. If the git files contain changes inside demo-app folder and files, set appOnly flag to true, else false.
 d. If the commit message says to skip or not to build and push the docker, then set dockerBuildAndPushContainer to false, else true.
 
 Please only respond with json and no explanation.
