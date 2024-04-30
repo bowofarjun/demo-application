@@ -172,7 +172,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    if(DONT_BUIL && DOCKER_BUILD_AND_PUSH_CONTAINER) {
+                    if(DONT_BUILD && DOCKER_BUILD_AND_PUSH_CONTAINER) {
                         withCredentials([usernamePassword(credentialsId: 'dockerreg', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''mvn -Ddocker.username="$USERNAME" -Ddocker.password="$PASSWORD" docker:push
                         '''
