@@ -139,7 +139,7 @@ pipeline {
         stage('Compile') {
             steps {
                 script{
-                    if(!DONT_BUILD.toBoolean() && APP_ONLY.toBoolean()) {
+                    if(!DONT_BUILD.toBoolean() && (APP_ONLY.toBoolean() || CONFIG_ONLY.toBoolean())) {
                     sh '''mvn clean compile
                     '''
                     }
