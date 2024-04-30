@@ -42,7 +42,7 @@
 					<registry>${dtr.base.url}</registry>
 					<images>
 						<image>
-							<name>${dtr.repo.name}/${project.artifactId}:${project.version}</name>
+							<name>${dtr.repo.name}/${project.artifactId}:${env.BUILD_ID}</name>
 							<build>
 								<dockerFileDir>${project.basedir}</dockerFileDir>
 							</build>
